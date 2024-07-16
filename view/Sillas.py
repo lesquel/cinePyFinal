@@ -8,16 +8,12 @@ from hooks.Recomendado import Recomendado
 def Sillas(ventana, fun, info, idUsuario):
     # Crear el contenedor principal
     frame_principal = Layout(ventana=ventana)
+
     
     # Crear frame1 y frame2
     frame1 = ctk.CTkFrame(frame_principal)
     frame2 = ctk.CTkFrame(frame_principal)
 
-    # Organizar frame1 y frame2 dentro del frame_principal usando grid
-    frame_principal.grid_columnconfigure(0, weight=1)
-    frame_principal.grid_columnconfigure(1, weight=1)
-    frame_principal.grid_rowconfigure(0, weight=1)
-    
     frame2.grid(row=0, column=0, sticky="nsew", padx=40, pady=40)
     frame1.grid(row=0, column=1, sticky="nsew", padx=40, pady=40)
     
@@ -53,5 +49,9 @@ def Sillas(ventana, fun, info, idUsuario):
     # Etiqueta para la pantalla en frame2
     pantalla = ctk.CTkLabel(frame2, text="Pantalla", font=("Arial", 14), bg_color="#222222", text_color="#ffffff", height=1, width=20)
     pantalla.grid(row=len(matriz) + 1, column=0, columnspan=6, padx=10, pady=10)
+
+    from components.Regresar import RegresarFunc
+    from Salas import Salas
+    RegresarFunc(frame1=frame_principal, funFramereegre=lambda: Salas(ventana=ventana, infoPelicula=info, idUsuario=idUsuario))
     
     return frame_principal

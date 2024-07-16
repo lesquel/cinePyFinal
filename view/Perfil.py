@@ -1,17 +1,12 @@
 import customtkinter as ctk
 from components.Text import Text
 from components.Img import Img
-from components.Nav import Nav
+from layout import Layout
 
 def Perfil(ventana, infoUser):
+    from components.Nav import Nav
     # Crear el marco principal
-    frame = ctk.CTkFrame(ventana, corner_radius=20)
-    frame.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
-
-    # Configurar grid para el marco principal
-    frame.grid_rowconfigure(0, weight=1)
-    frame.grid_columnconfigure(1, weight=1)
-
+    frame = Layout(ventana=ventana)
     # Añadir el menú lateral
     Nav(frame, [
         {"ventana": ventana, "infoUser": infoUser},
