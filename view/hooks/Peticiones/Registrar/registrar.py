@@ -1,4 +1,4 @@
-def registrar(registro_ventana, datosEntry):
+def registrar(main_frame, datosEntry):
     nombre = datosEntry[0].get()
     img = datosEntry[1].get()
     edad = datosEntry[2].get()
@@ -6,18 +6,11 @@ def registrar(registro_ventana, datosEntry):
     correo = datosEntry[4].get()
     contrasena = datosEntry[5].get()    
 
-    from datos.perfil import perfil
-    perfil.append({
-        "id": len(perfil) + 1,
-        "name": nombre,
-        "img": img,
-        "edad": edad,
-        "nombre": usuario,
-        "correo": correo,
-        "contra": contrasena
-    })
+    from hooks.Peticiones.insert.insertUser import insertUser
+
+    insertUser(nombre=nombre, img=img, edad=edad, usuario=usuario, correo=correo, contrasena=contrasena)
     
     # Mostrar un mensaje de éxito
     from tkinter import messagebox
     messagebox.showinfo("Registro exitoso", "Tus datos han sido registrados con éxito.")
-    registro_ventana.destroy()
+    main_frame.destroy()

@@ -8,11 +8,10 @@ def autentificacion(ventana, usuario, contrasena):
         return
     from hooks.Peticiones.GetUser import GetUser
     infoUser = GetUser(usuario, contrasena)
-
     from index import Index 
     if not infoUser:
         messagebox.showinfo("Error", "Usuario o contraseña incorrectos")
-    if "admin" not in infoUser or infoUser["admin"] == False:
+    if infoUser["admin"] == False:
         return Index(ventana, infoUser=infoUser)
     else:
         return Index(ventana, infoUser=infoUser, ifAdmin=True)

@@ -1,23 +1,27 @@
 import customtkinter as ctk
 from login import login
 
-# Configuración global para customtkinter
-ctk.set_appearance_mode("dark")  # Tema oscuro
-ctk.set_default_color_theme("dark-blue")
+# Configuración inicial de customtkinter
+ctk.set_appearance_mode("dark")  # Establece el modo de apariencia en tema oscuro
+ctk.set_default_color_theme("dark-blue")  # Establece el tema de color por defecto en azul oscuro
 
 # Crear la ventana principal
-ventana = ctk.CTk()
-ventana.title("Cine")
-# Obtener la resolución de la pantalla
-screen_width = ventana.winfo_screenwidth()
-screen_height = ventana.winfo_screenheight()
+main_window = ctk.CTk()  # Instancia de la ventana principal
+main_window.title("Cine")  # Título de la ventana
 
-# Configurar la ventana para que ocupe el 100% de la pantalla
-ventana.geometry(f"{screen_width}x{screen_height-25}+0+0")
-# Hacer que la ventana ocupe el 100% de la pantalla y deshabilitar el cambio de tamaño
-ventana.resizable(False, False)  # Deshabilitar el cambio de tamaño de la ventana
-# Iniciar la pantalla de login
-login(ventana)
+# Obtener la resolución de la pantalla
+screen_width = main_window.winfo_screenwidth()
+screen_height = main_window.winfo_screenheight()
+
+# Configurar la ventana para ocupar toda la pantalla, descontando la barra de tareas
+window_geometry = f"{screen_width}x{screen_height - 25}+0+0"
+main_window.geometry(window_geometry)
+
+# Deshabilitar el cambio de tamaño de la ventana
+main_window.resizable(False, False)
+
+# Iniciar la pantalla de login pasando la ventana principal como parámetro
+login(main_window)
 
 # Iniciar el bucle principal de la aplicación
-ventana.mainloop()
+main_window.mainloop()

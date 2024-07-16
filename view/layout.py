@@ -2,6 +2,15 @@ import customtkinter as ctk
 from hooks.destuirTodo import destuirTodo
 
 def Layout(ventana):
+    """
+    Configura y devuelve un marco de desplazamiento para una ventana dada.
+
+    Args:
+    - ventana: La ventana principal donde se colocará el marco de desplazamiento.
+
+    Returns:
+    - scroll_frame: El marco de desplazamiento configurado.
+    """
     # Limpiar todo el contenido previo en la ventana
     destuirTodo(ventana)
     

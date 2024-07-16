@@ -1,8 +1,9 @@
+import requests 
 def GetUser(usuario, contrasena):
-    from datos.perfil import perfil
-    buscarNombreContra = lambda nombre, contra: next((perfil for perfil in perfil if perfil["nombre"] == nombre and perfil["contra"] == contra), None)
-    return buscarNombreContra(nombre=usuario, contra=contrasena)
+    res = requests.get(f"http://localhost:8080/getUsuario?nombre={usuario}&contra={contrasena}")
+    json = res.json()
+    return json
 def GetUserId(idUsuario):
-    from datos.perfil import perfil
-    buscarId = lambda id: next((perfil for perfil in perfil if perfil["id"] == id), None)
-    return buscarId(id=idUsuario)
+    res = requests.get(f"http://localhost:8080/getUsuarioId?id={idUsuario}")
+    json = res.json()
+    return json

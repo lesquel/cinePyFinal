@@ -5,15 +5,26 @@ from datos.UrlImgs import UrlImgs
 import customtkinter as ctk
 
 def AllSIllas(matriz, frame, idUsuario):
+    # Configurar el frame principal para permitir la expansión
+    frame.grid_rowconfigure(0, weight=1)
+    frame.grid_columnconfigure(0, weight=1)
+
     fra = ctk.CTkFrame(frame)
     fra.grid(row=0, column=0, padx=40, pady=40, sticky="nsew")
+    fra.grid_columnconfigure(0, weight=1)  # Permitir expansión en columna
+    fra.grid_rowconfigure(0, weight=1)     # Permitir expansión en fila
+    
     def ejecutar2(b, r, c):
-        # Usamos `nonlocal` para indicar que `matriz` no es una variable local a `ejecutar2`
         nonlocal matriz
         matriz = Cambiar_Guardar.Cambiar_Guardar(b=b, r=r, c=c, matriz=matriz)
         fra.destroy()
         AllSIllas(matriz=matriz, frame=frame, idUsuario=idUsuario)
-        # Eliminar todos los widgets hijos en el frame para poder re-renderizar
+
+    # Configurar el grid del contenedor 'fra' para que las celdas se expandan
+    for i in range(len(matriz)):
+        fra.grid_rowconfigure(i, weight=1)  # Permitir expansión de filas
+    for j in range(len(matriz[0])):
+        fra.grid_columnconfigure(j, weight=1)  # Permitir expansión de columnas
 
     # Crear los botones para la matriz de sillas
     for i, f in enumerate(matriz):
@@ -31,3 +42,7 @@ def AllSIllas(matriz, frame, idUsuario):
                 b.configure(command=lambda b=b, r=i, c=j: ejecutar2(b, r, c))
             else:  # Asientos ocupados por otros usuarios
                 Sillas(parent=fra, tamanio=16, row=i, column=j, bg_color="#ff8888", imagen_url=UrlImgs["negro"])
+
+    # Configurar el frame principal para permitir la expansión
+    frame.grid_rowconfigure(0, weight=1)
+    frame.grid_columnconfigure(0, weight=1)

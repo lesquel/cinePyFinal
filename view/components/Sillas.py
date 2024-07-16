@@ -15,7 +15,7 @@ def Sillas(parent, row, column, tamanio, bg_color="#888888", imagen_url=None):
     Returns:
         btn (CTkButton): The created button.
     """
-    img = Img(imagen_url) if imagen_url else None
+    img = Img(imagen_url, 50) if imagen_url else None
     
     btn = ctk.CTkButton(parent, 
                         image=img,
@@ -25,12 +25,15 @@ def Sillas(parent, row, column, tamanio, bg_color="#888888", imagen_url=None):
                         fg_color="transparent",
                         border_color=bg_color,
                         text_color="#000000",
+                        height=100,  # Button width
                         corner_radius=10,  # Rounded corners for a smoother design
-                        width=120,  # Button width
-                        height=140,  # Button height
                         command=lambda: print("Button pressed"))  # Example function
     
     # Position the button in the grid
-    btn.grid(row=row, column=column, padx=10, pady=10)  # Add padding for spacing
+    btn.grid(row=row, column=column, padx=5, pady=5, sticky="nsew")  # Add padding for spacing
+    
+    # Configurar el grid del parent para que la celda del botón pueda expandirse
+    parent.grid_columnconfigure(column, weight=1)   
+    parent.grid_rowconfigure(row, weight=1)
 
     return [btn, row, column]

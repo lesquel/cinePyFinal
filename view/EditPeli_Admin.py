@@ -1,65 +1,109 @@
 import customtkinter as ctk
-from tkinter import StringVar  # Importamos StringVar
+from tkinter import StringVar  # Importar StringVar para variables de texto
 from hooks.destuirTodo import destuirTodo
 
 def EditAdmin(ventana, infoUser, infoPelicula):
+    """
+    Función para crear la interfaz de edición de información de una película para administradores.
+
+    Args:
+    - ventana: La ventana principal de la aplicación.
+    - infoUser: Información del usuario actual.
+    - infoPelicula: Información de la película a editar.
+
+    Returns:
+    - frame: El marco principal que contiene la interfaz de edición de película.
+    """
+    # Importar componentes necesarios
     from components.Text import Text
     from components.Button import Button
     from components.Img import Img
     from components.Regresar import RegresarFunc
     from layout import Layout
-    
+
     # Crear el marco principal
     frame = Layout(ventana)
 
-    # Envolver los valores de las películas en StringVar para permitir la edición en los Entry
+    # Marco principal dentro del layout
+    frame_main = ctk.CTkFrame(frame)
+    frame_main.grid(row=0, column=0, padx=40, pady=40, sticky="nsew")
+
+    # Sub-marcos para diferentes secciones de edición
+    frame_info = ctk.CTkFrame(frame_main)
+    frame_info.grid(row=1, column=0, padx=40, pady=40, sticky="nsew")
+
+    # Marco para nombre y descripción
+    frame_name_desc = ctk.CTkFrame(frame_info)
+    frame_name_desc.grid(row=0, column=0, padx=10, pady=10, sticky="nsew")
+
+    # Marco para duración, trailers y género
+    frame_others = ctk.CTkFrame(frame_info)
+    frame_others.grid(row=0, column=1, padx=10, pady=10, sticky="nsew")
+
+    # Marco para el botón de guardar cambios
+    frame_button = ctk.CTkFrame(frame_info)
+    frame_button.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+
+    # Variables de texto para editar
     nombre_var = StringVar(value=infoPelicula["nombre"])
     duracion_var = StringVar(value=infoPelicula["dura"])
+    trailers_var = StringVar(value=infoPelicula["trailer"])
     
-    # Como CTkTextbox no utiliza textvariable, lo configuramos más adelante con el texto actual
+    # Texto actual para la descripción
     descripcion_text = infoPelicula["descri"]
 
     # Mostrar la imagen de la película
-    Img(frame, infoPelicula["img"])
-    
-    # Crear entradas para editar la información de la película
-    nombre_label = ctk.CTkLabel(frame, text="Nombre:", font=("Arial", 16), width=200, height=35)
-    nombre_label.grid(row=1, column=0, padx=10, pady=10)
-    nombre_entry = ctk.CTkEntry(frame, textvariable=nombre_var, width=200, height=35)
-    nombre_entry.grid(row=1, column=1, padx=10, pady=10)
+    Img(frame_main, infoPelicula["img"])
 
-    duracion_label = ctk.CTkLabel(frame, text="Duración: (en horas)", font=("Arial", 16), width=200, height=35)
-    duracion_label.grid(row=2, column=2, padx=10, pady=10)
-    duracion_entry = ctk.CTkEntry(frame, textvariable=duracion_var, width=200, height=35)
-    duracion_entry.grid(row=2, column=4, padx=10, pady=10)
+    # Etiquetas y campos de entrada para nombre y descripción
+    label_nombre = ctk.CTkLabel(frame_name_desc, text="Nombre:", font=("Arial", 16), width=200, height=35)
+    label_nombre.grid(row=0, column=0, padx=10, pady=10)
+    entry_nombre = ctk.CTkEntry(frame_name_desc, textvariable=nombre_var, width=200, height=35)
+    entry_nombre.grid(row=0, column=1, padx=10, pady=10)
 
-    descripcion_label = ctk.CTkLabel(frame, text="Descripción:", font=("Arial", 16), width=200, height=35)
-    descripcion_label.grid(row=3, column=0, padx=10, pady=10)
-    
-    descripcion_textbox = ctk.CTkTextbox(frame, width=400, height=100)  # Caja de texto multilinea para descripciones
-    descripcion_textbox.grid(row=3, column=1, padx=10, pady=10)
-    descripcion_textbox.insert("1.0", descripcion_text)  # Insertar el texto de la descripción actual
-    descripcion_textbox.configure(wrap='word')  # Ajustar el texto a las palabras
+    label_descripcion = ctk.CTkLabel(frame_name_desc, text="Descripción:", font=("Arial", 16), width=200, height=35)
+    label_descripcion.grid(row=1, column=0, padx=10, pady=10)
+    textbox_descripcion = ctk.CTkTextbox(frame_name_desc, width=400, height=100)
+    textbox_descripcion.grid(row=1, column=1, padx=10, pady=10)
+    textbox_descripcion.insert("1.0", descripcion_text)
+    textbox_descripcion.configure(wrap='word')
+
+    # Etiquetas y campos de entrada para duración y trailers
+    label_duracion = ctk.CTkLabel(frame_others, text="Duración: (en horas)", font=("Arial", 16), width=200, height=35)
+    label_duracion.grid(row=0, column=0, padx=10, pady=10)
+    entry_duracion = ctk.CTkEntry(frame_others, textvariable=duracion_var, width=200, height=35)
+    entry_duracion.grid(row=0, column=1, padx=10, pady=10)
+
+    label_trailers = ctk.CTkLabel(frame_others, text="Trailers:", font=("Arial", 16), width=200, height=35)
+    label_trailers.grid(row=1, column=0, padx=10, pady=10)
+    entry_trailers = ctk.CTkEntry(frame_others, textvariable=trailers_var, width=200, height=35)
+    entry_trailers.grid(row=1, column=1, padx=10, pady=10)
+
+    # Componente personalizado para seleccionar género
+    from components.GeneroEntry import GeneroEntry, obtener_id_genero
+    genero_var, genero_menu, entries = GeneroEntry(parent=frame_others, campos=["", "", ""], entries={}, valorPordefecto=infoPelicula["genero"])
 
     def guardar_cambios():
-        # Obtener los valores actualizados de los StringVar
-        newInfoPelicula = {
+        # Obtener los valores actualizados para la película
+        new_info_pelicula = {
             "id": infoPelicula["id"],
             "nombre": nombre_var.get(),
-            "descri": descripcion_textbox.get("1.0", "end-1c"),  # Obtener el texto de la caja de texto
+            "descri": textbox_descripcion.get("1.0", "end-1c"),  # Obtener el texto de la caja de texto
             "dura": duracion_var.get(),
-            "img": infoPelicula["img"]  # La imagen no se puede editar aquí
+            "img": infoPelicula["img"],
+            "trailers": trailers_var.get(),
+            "genero_id": obtener_id_genero(genero_var.get())
         }
-
-        # Guardar los cambios (la función GuardarPeli debe estar definida en hooks.Peticiones.Guardar_peli)
-        from hooks.Peticiones.Guardar_peli import GuardarPeli
-        GuardarPeli(infoPelicula, newInfoPelicula)
+        
+        # Llamar a la función de actualización de película
+        from hooks.Peticiones.apdate.apdatePeli import apdatePeli
+        apdatePeli(infoPelicula=new_info_pelicula, infoUser=infoUser, ventana=ventana)
 
     # Botón para guardar los cambios
-    Button(frame, texto="Guardar", tamanio=16, row=4, column=0, eventoClick=guardar_cambios)
+    Button(frame_button, texto="Guardar", tamanio=16, row=0, column=0, eventoClick=guardar_cambios)
 
     # Función para regresar a la pantalla anterior
     from index import Index
-    RegresarFunc(frame1=frame, funFramereegre=lambda: Index(ventana=ventana, infoUser=infoUser, ifAdmin=True))
+    RegresarFunc(frame1=frame_main, funFramereegre=lambda: Index(ventana=ventana, infoUser=infoUser, ifAdmin=True))
 
     return frame
